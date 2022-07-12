@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Draw a blue rectangle (canvas version)</title>
+  </head>
+
+  <body onload="main()">
+    <script type="text/data" id="vshader">
+      attribute vec4 a_Position;
+      attribute float a_PointSize;
+      void main() {
+          gl_Position = a_Position;
+          gl_PointSize = 10.0;
+      }
+    </script>
+    <script type="text/data" id="fshader">
+      precision mediump float;
+      uniform vec4 u_FragColor;
+      void main() {
+          gl_FragColor = u_FragColor;
+      }
+    </script>
+    <canvas id="example" width="300" height="600"> </canvas>
+
+    <script src="./lib/webgl-utils.js"></script>
+    <script src="./lib/webgl-debug.js"></script>
+    <script src="./lib/cuon-utils.js"></script>
+    <script src="ClickedPoint.js"></script>
+  </body>
+</html>
