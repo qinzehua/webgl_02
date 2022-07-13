@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Draw a blue rectangle (canvas version)</title>
+  </head>
+
+  <body onload="main()">
+    <script type="text/data" id="vshader">
+      attribute vec4 a_Position;
+      uniform vec4 u_Translation;
+      void main() {
+          gl_Position = a_Position + u_Translation;
+          gl_PointSize = 10.0;
+      }
+    </script>
+    <script type="text/data" id="fshader">
+      precision mediump float;
+      void main() {
+          gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+      }
+    </script>
+    <canvas id="canvas" width="300" height="600"></canvas>
+
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+    <script src="TranslatedTrangle.js"></script>
+  </body>
+</html>
