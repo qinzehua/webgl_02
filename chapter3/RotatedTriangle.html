@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Draw a blue rectangle (canvas version)</title>
+  </head>
+
+  <body onload="main()">
+    <script type="text/data" id="vshader">
+      attribute vec4 a_Position;
+      uniform float u_CosB, u_SinB;
+      void main() {
+          gl_Position.x = a_Position.x * u_CosB - a_Position.y * u_SinB;
+          gl_Position.y = a_Position.x * u_SinB + a_Position.y * u_CosB;
+          gl_Position.z = a_Position.z;
+          gl_Position.w = 1.0;
+          gl_PointSize = 10.0;
+      }
+    </script>
+    <script type="text/data" id="fshader">
+      precision mediump float;
+      void main() {
+          gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+      }
+    </script>
+    <canvas id="canvas" width="400" height="400"></canvas>
+
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+    <script src="RotatedTriangle.js"></script>
+  </body>
+</html>
