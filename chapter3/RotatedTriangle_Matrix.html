@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Draw a blue rectangle (canvas version)</title>
+  </head>
+
+  <body onload="main()">
+    <script type="text/data" id="vshader">
+      attribute vec4 a_Position;
+      uniform mat4 u_xformMatrix;
+      void main() {
+          gl_Position = u_xformMatrix * a_Position;
+          gl_PointSize = 10.0;
+      }
+    </script>
+    <script type="text/data" id="fshader">
+      precision mediump float;
+      void main() {
+          gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+      }
+    </script>
+    <canvas id="canvas" width="400" height="400"></canvas>
+
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+    <script src="RotatedTriangle_Matrix.js"></script>
+  </body>
+</html>
