@@ -17,11 +17,17 @@ function main() {
     const a_Position = gl.getAttribLocation(gl.program, "a_Position");
     const a_TextureCoord = gl.getAttribLocation(gl.program, "a_TextureCoord");
     // prettier-ignore
+    // const vertices = new Float32Array([
+    //   -0.5, 0.5,0,1,
+    //   -0.5, -0.5, 0, 0,
+    //   0.5, 0.5, 1,1,
+    //   0.5, -0.5, 1,0,
+    // ]);
     const vertices = new Float32Array([
-      -0.3, 0.3,0,1,
-      -0.3, -0.3, 0, 0,
-      0.3, 0.3, 1,1,
-      0.3, -0.3, 1,0,
+      -0.5,  0.5,   -0.3, 1.7,
+    -0.5, -0.5,   -0.3, -0.2,
+     0.5,  0.5,   1.7, 1.7,
+     0.5, -0.5,   1.7, -0.2
     ]);
     const F_ZIE = vertices.BYTES_PER_ELEMENT;
     const vertexBuffer = gl.createBuffer();

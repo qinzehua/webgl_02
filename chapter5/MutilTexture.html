@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Draw a blue rectangle (canvas version)</title>
+  </head>
+
+  <body onload="main()">
+    <script type="text/data" id="vshader">
+      attribute vec4 a_Position;
+      attribute vec2 a_TextureCoord;
+      varying vec2 v_TextureCoord;
+      void main() {
+          gl_Position =  a_Position;
+          v_TextureCoord = a_TextureCoord;
+       }
+    </script>
+    <script type="text/data" id="fshader">
+      precision mediump float;
+      varying vec2 v_TextureCoord;
+      uniform sampler2D u_Sampler0;
+      uniform sampler2D u_Sampler1;
+      void main() {
+          vec4 color0 = texture2D(u_Sampler0, v_TextureCoord);
+          vec4 color1 = texture2D(u_Sampler1, v_TextureCoord);
+          gl_FragColor = color0 * color1;
+      }
+    </script>
+    <canvas id="canvas" width="600" height="600"></canvas>
+
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+    <script src="../lib/cuon-matrix.js"></script>
+    <script src="MutilTexture.js"></script>
+  </body>
+</html>
