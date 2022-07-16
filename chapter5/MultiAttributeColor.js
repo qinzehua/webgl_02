@@ -40,7 +40,7 @@ function main() {
 
   function initRotation(gl, ANGLE = 90) {
     var xformMatrix = new Matrix4();
-    // xformMatrix.setRotate(ANGLE, 0, 0, 1);
+    xformMatrix.setRotate(ANGLE, 0, 0, 1);
     // xformMatrix.translate(0.35, 0, 0);
 
     const u_xformMatrix = gl.getUniformLocation(gl.program, "u_xformMatrix");
