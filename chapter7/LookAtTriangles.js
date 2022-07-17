@@ -4,9 +4,10 @@ var VSHADER_SOURCE =
   "attribute vec4 a_Position;\n" +
   "attribute vec4 a_Color;\n" +
   "uniform mat4 u_ViewMatrix;\n" +
+  "uniform mat4 u_ProjectMatrix;\n" +
   "varying vec4 v_Color;\n" +
   "void main() {\n" +
-  "  gl_Position = u_ViewMatrix * a_Position;\n" +
+  "  gl_Position = u_ProjectMatrix * u_ViewMatrix * a_Position;\n" +
   "  v_Color = a_Color;\n" +
   "}\n";
 
@@ -53,19 +54,42 @@ function main() {
     console.log("Failed to get the storage locations of u_ViewMatrix");
     return;
   }
+  var u_ProjectMatrix = gl.getUniformLocation(gl.program, "u_ProjectMatrix");
+  if (!u_ProjectMatrix) {
+    console.log("Failed to get the storage locations of u_ProjectMatrix");
+    return;
+  }
 
   // Set the matrix to be used for to set the camera view
   var viewMatrix = new Matrix4();
-  viewMatrix.setLookAt(0.2, 0.25, 0.25, 0, 0, 0, 0, 1, 0);
+  var projectMatrix = new Matrix4();
+  projectMatrix.setOrtho(-1.0, 1.0, -1.0, 1.0, 0.0, 2.0);
+  gl.uniformMatrix4fv(u_ProjectMatrix, false, projectMatrix.elements);
 
-  // Set the view matrix
-  gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix.elements);
+  document.onkeydown = keydown;
+  var g_EyeX = 0.2,
+    g_EyeY = 0.25,
+    g_EyeZ = 0.25; // Eye position
+  function keydown(ev) {
+    if (ev.keyCode == 39) {
+      // The right arrow key was pressed
+      g_EyeX += 0.01;
+    } else if (ev.keyCode == 37) {
+      // The left arrow key was pressed
+      g_EyeX -= 0.01;
+    } else {
+      return;
+    } // Prevent the unnecessary drawing
+    draw();
+  }
 
-  // Clear <canvas>
-  gl.clear(gl.COLOR_BUFFER_BIT);
-
-  // Draw the rectangle
-  gl.drawArrays(gl.TRIANGLES, 0, n);
+  function draw() {
+    viewMatrix.setLookAt(g_EyeX, g_EyeY, g_EyeZ, 0, 0, 0, 0, 1, 0);
+    gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix.elements);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES, 0, n);
+  }
+  draw();
 }
 
 function initVertexBuffers(gl) {
