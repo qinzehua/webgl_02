@@ -141,7 +141,10 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     gl.drawArrays(gl.TRIANGLES, 0, n);
-    nf.innerHTML = 'near: ' + Math.round(g_near * 100)/100 + ', far: ' + Math.round(g_far*100)/100;
-
+    nf.innerHTML =
+      "near: " +
+      Math.round(g_near * 100) / 100 +
+      ", far: " +
+      Math.round(g_far * 100) / 100;
   }
 }
