@@ -22,7 +22,6 @@ function main() {
   gl.enable(gl.DEPTH_TEST);
   //获取转换矩阵变量
   const u_MvpMatrix = gl.getUniformLocation(gl.program, "u_MvpMatrix");
-  const u_LightColor = gl.getUniformLocation(gl.program, "u_LightColor");
   const u_LightDirection = gl.getUniformLocation(
     gl.program,
     "u_LightDirection"
@@ -37,8 +36,6 @@ function main() {
   //往shader写入矩阵
   gl.uniformMatrix4fv(u_MvpMatrix, false, verticx4.elements);
 
-  //光照颜色
-  gl.uniform4f(u_LightColor, 1.0, 1.0, 1.0, 1.0);
   //光照方向
   var lightDirection = new Vector3([0.5, 3.0, 4.0]);
   lightDirection.normalize();
