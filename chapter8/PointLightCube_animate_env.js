@@ -20,14 +20,16 @@ function main() {
   gl.clearColor(0.0, 0.0, 0.0, 1);
   //深度测试
   gl.enable(gl.DEPTH_TEST);
-  //获取转换矩阵变量
+
   const u_MvpMatrix = gl.getUniformLocation(gl.program, "u_MvpMatrix");
   const u_NormalMatrix = gl.getUniformLocation(gl.program, "u_NormalMatrix");
-  const u_LightDirection = gl.getUniformLocation(
-    gl.program,
-    "u_LightDirection"
-  );
+  const u_LightPosition = gl.getUniformLocation(gl.program, "u_LightPosition");
   const u_EnvLight = gl.getUniformLocation(gl.program, "u_EnvLight");
+  const u_TanslateMatrix = gl.getUniformLocation(
+    gl.program,
+    "u_TanslateMatrix"
+  );
+
   gl.uniform3f(u_EnvLight, 0.2, 0.2, 0.2);
 
   const verticx4 = new Matrix4();
@@ -36,29 +38,31 @@ function main() {
   // 设置视点
   verticx4.lookAt(3, 3, 7, 0, 0, 0, 0, 1, 0);
 
-  //光照方向
-  var lightDirection = new Vector3([0.5, 3.0, 4.0]);
-  lightDirection.normalize();
-  gl.uniform3fv(u_LightDirection, lightDirection.elements);
-
   let angle = 0;
   const rotateMatrix = new Matrix4();
   var mvpMatrix = new Matrix4();
   const normalMatrix = new Matrix4();
+
+  let z = 5;
   function tick() {
+    z -= 0.01;
     angle = animate(angle);
+    //点光源位置
+    gl.uniform3f(u_LightPosition, 1, 3.0, z);
+
+    // 投影+视点+旋转矩阵
     rotateMatrix.setRotate(angle, 0, 1, 0);
     mvpMatrix.set(verticx4).multiply(rotateMatrix);
-    //往shader写入矩阵
     gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
 
+    // 旋转矩阵的逆转置矩阵
     normalMatrix.setInverseOf(rotateMatrix);
     normalMatrix.transpose();
     gl.uniformMatrix4fv(u_NormalMatrix, false, normalMatrix.elements);
 
-    //清理颜色缓冲区和深度缓冲区
+    gl.uniformMatrix4fv(u_TanslateMatrix, false, rotateMatrix.elements);
+
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    // 绘制立方体
     gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_BYTE, 0);
     requestAnimationFrame(tick);
   }
