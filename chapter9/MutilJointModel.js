@@ -24,46 +24,62 @@ function main() {
   const u_MvpMatrix = gl.getUniformLocation(gl.program, "u_MvpMatrix");
   const u_NormalMatrix = gl.getUniformLocation(gl.program, "u_NormalMatrix");
   document.onkeydown = (ev) => {
+    console.log(ev.keyCode);
     switch (ev.keyCode) {
-      case 38:
+      case 83: // 绕 z-axis 逆时针 正方向
         if (g_joint1Angle < 135.0) g_joint1Angle += ANGLE_STEP;
         break;
-      case 40:
+      case 87: // 绕 z-axis 顺时针 负方向
         if (g_joint1Angle > -135.0) g_joint1Angle -= ANGLE_STEP;
         break;
-      case 39:
+      case 68: // 字母D 绕  y-axis 逆时针 表示正旋转正方向
         g_arm1Angle = (g_arm1Angle + ANGLE_STEP) % 360;
         break;
-      case 37:
+      case 65: // 字母A 绕  y-axis 顺时针 表示负的旋转正方向
         g_arm1Angle = (g_arm1Angle - ANGLE_STEP) % 360;
+        break;
+      case 90: // 'ｚ'key -> the positive rotation of joint2
+        g_joint2Angle = (g_joint2Angle + ANGLE_STEP) % 360;
+        break;
+      case 88: // 'x'key -> the negative rotation of joint2
+        g_joint2Angle = (g_joint2Angle - ANGLE_STEP) % 360;
+        break;
+      case 86: // 'v'key -> the positive rotation of joint3
+        if (g_joint3Angle < 60.0)
+          g_joint3Angle = (g_joint3Angle + ANGLE_STEP) % 360;
+        break;
+      case 67: // 'c'key -> the nagative rotation of joint3
+        if (g_joint3Angle > -60.0)
+          g_joint3Angle = (g_joint3Angle - ANGLE_STEP) % 360;
         break;
       default:
         return; // Skip drawing at no effective action
     }
-    draw(gl, indces, u_MvpMatrix, u_NormalMatrix);
+    draw(gl, indces.n1, u_MvpMatrix, u_NormalMatrix);
   };
-  draw(gl, indces, u_MvpMatrix, u_NormalMatrix);
+  draw(gl, indces.n1, u_MvpMatrix, u_NormalMatrix);
 }
 
 function initVertexBuffers(gl) {
   // prettier-ignore
   var positions1 = [
-    1.5,  0.0,-1.5,  -1.5,  0.0,-1.5,  -1.5, 10.0,-1.5,   1.5, 10.0,-1.5,  // v4-v7-v6-v5 back
-    1.5, 10.0, 1.5,  -1.5, 10.0, 1.5,  -1.5,  0.0, 1.5,   1.5,  0.0, 1.5, // v0-v1-v2-v3 front
-    1.5, 10.0, 1.5,   1.5,  0.0, 1.5,   1.5,  0.0,-1.5,   1.5, 10.0,-1.5, // v0-v3-v4-v5 right
-    1.5, 10.0, 1.5,   1.5, 10.0,-1.5,  -1.5, 10.0,-1.5,  -1.5, 10.0, 1.5, // v0-v5-v6-v1 up
-   -1.5, 10.0, 1.5,  -1.5, 10.0,-1.5,  -1.5,  0.0,-1.5,  -1.5,  0.0, 1.5, // v1-v6-v7-v2 left
-   -1.5,  0.0,-1.5,   1.5,  0.0,-1.5,   1.5,  0.0, 1.5,  -1.5,  0.0, 1.5, // v7-v4-v3-v2 down
+    0.5, 1.0, 0.5, -0.5, 1.0, 0.5, -0.5, 0.0, 0.5,  0.5, 0.0, 0.5, // v0-v1-v2-v3 front
+    0.5, 1.0, 0.5,  0.5, 0.0, 0.5,  0.5, 0.0,-0.5,  0.5, 1.0,-0.5, // v0-v3-v4-v5 right
+    0.5, 1.0, 0.5,  0.5, 1.0,-0.5, -0.5, 1.0,-0.5, -0.5, 1.0, 0.5, // v0-v5-v6-v1 up
+   -0.5, 1.0, 0.5, -0.5, 1.0,-0.5, -0.5, 0.0,-0.5, -0.5, 0.0, 0.5, // v1-v6-v7-v2 left
+   -0.5, 0.0,-0.5,  0.5, 0.0,-0.5,  0.5, 0.0, 0.5, -0.5, 0.0, 0.5, // v7-v4-v3-v2 down
+    0.5, 0.0,-0.5, -0.5, 0.0,-0.5, -0.5, 1.0,-0.5,  0.5, 1.0,-0.5  // v4-v7-v6-v5 back
   ];
 
   // prettier-ignore
   var normals1 = [
-    0.0, 0.0,-1.0,  0.0, 0.0,-1.0,  0.0, 0.0,-1.0,  0.0, 0.0,-1.0,  // v4-v7-v6-v5 back
     0.0, 0.0, 1.0,  0.0, 0.0, 1.0,  0.0, 0.0, 1.0,  0.0, 0.0, 1.0, // v0-v1-v2-v3 front
     1.0, 0.0, 0.0,  1.0, 0.0, 0.0,  1.0, 0.0, 0.0,  1.0, 0.0, 0.0, // v0-v3-v4-v5 right
     0.0, 1.0, 0.0,  0.0, 1.0, 0.0,  0.0, 1.0, 0.0,  0.0, 1.0, 0.0, // v0-v5-v6-v1 up
    -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, // v1-v6-v7-v2 left
     0.0,-1.0, 0.0,  0.0,-1.0, 0.0,  0.0,-1.0, 0.0,  0.0,-1.0, 0.0, // v7-v4-v3-v2 down
+    0.0, 0.0,-1.0,  0.0, 0.0,-1.0,  0.0, 0.0,-1.0,  0.0, 0.0,-1.0,  // v4-v7-v6-v5 back
+
   ];
 
   // prettier-ignore
@@ -176,39 +192,82 @@ function initArrayBuffer(gl, attribute, data, type, num) {
 }
 
 var canvas = document.getElementById("webgl");
-var angle = 10;
+
 var ANGLE_STEP = 3.0;
-var g_arm1Angle = -40.0;
-var g_joint1Angle = -67.0;
-var arm1Length = 10.0;
+var g_arm1Angle = 0.0; // 上臂
+var g_joint1Angle = 0.0; // 前臂
+var g_joint2Angle = 0.0; // 手掌
+var g_joint3Angle = 0.0; //手指
 
 const mvpMatrix = new Matrix4();
-const modalMatrix = new Matrix4();
+var modalMatrix = new Matrix4();
 const viewProjMatrix = new Matrix4();
 const g_normalMatrix = new Matrix4();
 
 viewProjMatrix.setPerspective(50.0, canvas.width / canvas.height, 1.0, 100.0);
 viewProjMatrix.lookAt(20.0, 10.0, 30.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-function draw(gl, indces, u_MvpMatrix, u_NormalMatrix) {
+function draw(gl, n, u_MvpMatrix, u_NormalMatrix) {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+  // 基座
+  var baseHeight = 2.0;
   modalMatrix.setTranslate(0.0, -12.0, 0.0);
-  modalMatrix.rotate(g_arm1Angle, 0.0, 1.0, 0.0);
-  drawBox(gl, indces.n1 + indces.n2, 0, u_MvpMatrix, u_NormalMatrix);
+  drawBox(gl, n, 10, baseHeight, 10, u_MvpMatrix, u_NormalMatrix);
 
+  // 上臂
+  var arm1Length = 10.0;
+  modalMatrix.translate(0.0, baseHeight, 0.0);
+  modalMatrix.rotate(g_arm1Angle, 0.0, 1.0, 0.0); //绕y轴旋转
+  drawBox(gl, n, 3.0, arm1Length, 3.0, u_MvpMatrix, u_NormalMatrix);
+
+  // 前臂
+  var arm2Length = 10.0;
   modalMatrix.translate(0.0, arm1Length, 0.0);
-  modalMatrix.rotate(g_joint1Angle, 0.0, 0.0, 1.0);
-  modalMatrix.scale(1.3, 1.0, 1.3); // Make it a little thicker
-  drawBox(gl, indces.n1, 0, u_MvpMatrix, u_NormalMatrix);
+  modalMatrix.rotate(g_joint1Angle, 0.0, 0.0, 1.0); //绕z轴旋转
+  drawBox(gl, n, 4.0, arm2Length, 4.0, u_MvpMatrix, u_NormalMatrix);
+
+  //手掌
+  var palmLength = 2.0;
+  modalMatrix.translate(0.0, arm2Length, 0.0);
+  modalMatrix.rotate(g_joint2Angle, 0.0, 1.0, 0.0); //绕z轴旋转
+  drawBox(gl, n, 2.0, palmLength, 6.0, u_MvpMatrix, u_NormalMatrix);
+
+  modalMatrix.translate(0.0, palmLength, 0.0);
+  pushMatrix(modalMatrix);
+  modalMatrix.translate(0, 0, 2);
+  modalMatrix.rotate(g_joint3Angle, 1.0, 0.0, 0.0);
+  drawBox(gl, n, 2.0, 2, 1.0, u_MvpMatrix, u_NormalMatrix);
+  modalMatrix = popMatrix();
+
+  pushMatrix(modalMatrix);
+  modalMatrix.translate(0, 0, -2);
+  modalMatrix.rotate(-g_joint3Angle, 1.0, 0.0, 0.0);
+  drawBox(gl, n, 2.0, 2, 1.0, u_MvpMatrix, u_NormalMatrix);
+  modalMatrix = popMatrix();
 }
 
-function drawBox(gl, n, offset, u_MvpMatrix, u_NormalMatrix) {
+function drawBox(gl, n, width, height, depth, u_MvpMatrix, u_NormalMatrix) {
+  // 生成一个新的modalMatrix，在此基础上缩放
+  // 避免影响后续方块的大小
+  pushMatrix(modalMatrix);
+  modalMatrix.scale(width, height, depth);
   mvpMatrix.set(viewProjMatrix).multiply(modalMatrix);
   g_normalMatrix.setInverseOf(modalMatrix);
   g_normalMatrix.transpose();
 
   gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
   gl.uniformMatrix4fv(u_NormalMatrix, false, g_normalMatrix.elements);
-  gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_SHORT, offset);
+  gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_SHORT, 0);
+  modalMatrix = popMatrix();
+}
+
+var g_matrixStack = [];
+function pushMatrix(m) {
+  var m2 = new Matrix4(m);
+  g_matrixStack.push(m2);
+}
+
+function popMatrix() {
+  return g_matrixStack.pop();
 }
