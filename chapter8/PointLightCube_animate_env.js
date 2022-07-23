@@ -60,6 +60,7 @@ function main() {
     normalMatrix.transpose();
     gl.uniformMatrix4fv(u_NormalMatrix, false, normalMatrix.elements);
 
+    // 旋转矩阵
     gl.uniformMatrix4fv(u_TanslateMatrix, false, rotateMatrix.elements);
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
