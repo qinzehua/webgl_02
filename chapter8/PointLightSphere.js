@@ -15,6 +15,7 @@ function main() {
   }
 
   var n = initVertexBuffers(gl);
+  console.log("n: ", n);
 
   // 设置清除的背景色
   gl.clearColor(0.0, 0.0, 0.0, 1);
