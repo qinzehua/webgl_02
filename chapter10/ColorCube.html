@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hello cube</title>
+  </head>
+
+  <body onload="main()">
+    <script type="text/data" id="vshader">
+      attribute vec4 a_Position;
+      attribute vec2 a_TexCoord;
+      uniform mat4 u_MvpMatrix;
+      varying vec2 v_TexCoord;
+      void main() {
+          gl_Position = u_MvpMatrix * a_Position;
+          v_TexCoord = a_TexCoord;
+      }
+    </script>
+    <script type="text/data" id="fshader">
+      precision mediump float;
+      uniform sampler2D u_Sampler;
+      varying vec2 v_TexCoord;
+      void main() {
+        gl_FragColor = texture2D(u_Sampler, v_TexCoord);
+      }
+    </script>
+
+    <canvas id="webgl" width="400" height="400">
+      Please use a browser that supports "canvas"
+    </canvas>
+
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+    <script src="../lib/cuon-matrix.js"></script>
+    <script src="ColorCube.js"></script>
+  </body>
+</html>
