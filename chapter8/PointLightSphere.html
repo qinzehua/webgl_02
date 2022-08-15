@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hello cube</title>
+  </head>
+
+  <body onload="main()">
+    <script type="text/data" id="vshader">
+      attribute vec4 a_Position; // 顶点
+      uniform mat4 u_MvpMatrix; // 视点矩阵x投影矩阵x旋转矩阵
+
+      attribute vec4 a_Normal; // 顶点法向量
+      uniform vec3 u_LightPosition; // 点光源位置
+      uniform mat4 u_TanslateMatrix; // 旋转矩阵 (得到顶点的世界坐标)
+      uniform mat4 u_NormalMatrix; // 旋转矩阵的逆转置矩阵(用于同步旋转法向量)
+      uniform vec3 u_EnvLight; // 环境光
+      varying vec4 v_Color; //传递给偏远着色器的颜色
+      void main() {
+          vec4 color = vec4(1.0, 1.0, 1.0, 1.0);
+          gl_Position = u_MvpMatrix * a_Position; // 每个点最终绘制的坐标
+          vec4 normal = u_NormalMatrix * a_Normal; // 得到每个点旋转后对应的法向量
+          vec4 vertexPosition = u_TanslateMatrix * a_Position; // 得到每个点的世界坐标
+          vec3 u_LightDirection = normalize(u_LightPosition - vec3(vertexPosition)); // 得到点光源到每个点的方向
+          float nDotL = max(dot(u_LightDirection, normalize(normal.xyz)), 0.0); // 点光源与法向量的点积
+          vec3 diffuse = vec3(color) * nDotL;
+          vec3 ambient = u_EnvLight * color.rgb;
+          v_Color = vec4(diffuse + ambient, color.a);
+      }
+    </script>
+    <script type="text/data" id="fshader">
+      precision mediump float;
+      varying vec4 v_Color;
+      void main() {
+        gl_FragColor = v_Color;
+      }
+    </script>
+
+    <canvas id="webgl" width="400" height="400">
+      Please use a browser that supports "canvas"
+    </canvas>
+
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+    <script src="../lib/cuon-matrix.js"></script>
+    <script src="PointLightSphere.js"></script>
+  </body>
+</html>
